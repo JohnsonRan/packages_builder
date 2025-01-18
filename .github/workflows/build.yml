@@ -1,0 +1,117 @@
+name: Build OpenWrt Packages
+
+on:
+  schedule:
+    - cron: '30 0 * * *' 
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ github.event_name == 'workflow_dispatch' || steps.check-updates.outputs.has_changes }}
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check upstream changes
+        id: check-updates
+        if: github.event_name != 'workflow_dispatch'
+        run: |
+          changed=false
+          while IFS= read -r repo; do
+            [ -z "$repo" ] && continue
+            echo "Checking $repo..."
+            latest_commit=$(curl -s "https://api.github.com/repos/$repo/commits/main" | jq -r '.sha')
+            cache_file=".cache/${repo//\//_}.commit"
+            mkdir -p .cache
+            if [ ! -f "$cache_file" ] || [ "$(cat $cache_file)" != "$latest_commit" ]; then
+              echo "$latest_commit" > "$cache_file"
+              changed=true
+            fi
+          done < buildlist.txt
+          echo "has_changes=$changed" >> $GITHUB_OUTPUT
+
+      - name: Force build for manual trigger
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "has_changes=true" >> $GITHUB_OUTPUT
+
+      - name: Cache commit hashes
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: .cache
+          key: ${{ runner.os }}-commit-cache-${{ github.run_id }}
+          restore-keys: ${{ runner.os }}-commit-cache-
+
+  build:
+    needs: check
+    if: needs.check.outputs.should_build == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - aarch64_generic
+          - x86_64
+        branch:
+          - openwrt-23.05
+          - openwrt-24.10
+          - SNAPSHOT
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read build list and clone repositories
+        run: |
+          mkdir -p package
+          while IFS= read -r repo; do
+            [ -z "$repo" ] && continue
+            echo "Cloning $repo..."
+            git clone "https://github.com/$repo" "package/$(basename $repo)"
+          done < buildlist.txt
+
+      - name: Build packages
+        uses: openwrt/gh-action-sdk@main
+        with:
+          arch: ${{ matrix.arch }}
+          branch: ${{ matrix.branch }}
+          
+      - name: Package artifacts by type
+        run: |
+          cd bin/packages/${{ matrix.arch }}/packages/
+          for pkg in speedtest-ex node-exporter boltbrowser; do
+            if [ "${{ matrix.branch }}" = "SNAPSHOT" ]; then
+              find . -name "${pkg}*.apk" -exec tar -czf ${pkg}_${{ matrix.arch }}_${{ matrix.branch }}.tar.gz {} +
+            else
+              find . -name "${pkg}*.ipk" -exec tar -czf ${pkg}_${{ matrix.arch }}_${{ matrix.branch }}.tar.gz {} +
+            fi
+          done
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ matrix.arch }}-${{ matrix.branch }}
+          path: |
+            bin/packages/${{ matrix.arch }}/packages/*.ipk
+            bin/packages/${{ matrix.arch }}/packages/*.apk
+            bin/packages/${{ matrix.arch }}/packages/*.tar.gz
+
+      - name: Create Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          files: |
+            bin/packages/${{ matrix.arch }}/packages/*.tar.gz
+          name: Release ${{ github.sha }}
+          tag_name: release-${{ github.sha }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            repository: ${{ github.repository }}
+            retain_days: 0
+            keep_minimum_runs: 2
