@@ -18,43 +18,38 @@ jobs:
         id: check-updates
         if: github.event_name != 'workflow_dispatch'
         run: |
-          changed=false
-          while IFS= read -r repo; do
-            [ -z "$repo" ] && continue
+          today=$(date -u '+%Y-%m-%d')
+          has_changes=false
+          
+          for repo in $(grep -v '^$' buildlist.txt); do
             echo "Checking $repo..."
-            latest_commit=$(curl -s "https://api.github.com/repos/$repo/commits/main" | jq -r '.sha')
-            cache_file=".cache/${repo//\//_}.commit"
-            mkdir -p .cache
-            if [ ! -f "$cache_file" ] || [ "$(cat $cache_file)" != "$latest_commit" ]; then
-              echo "$latest_commit" > "$cache_file"
-              changed=true
+            # 获取最新提交的日期
+            latest_commit_date=$(curl -s "https://api.github.com/repos/$repo/commits?per_page=1" | jq -r '.[0].commit.committer.date[:10]')
+            
+            if [ "$latest_commit_date" == "$today" ]; then
+              echo "Found changes in $repo on $today"
+              has_changes=true
+              break
             fi
-          done < buildlist.txt
-          echo "has_changes=$changed" >> $GITHUB_OUTPUT
+          done
+          
+          echo "has_changes=$has_changes" >> $GITHUB_OUTPUT
 
       - name: Force build for manual trigger
         if: github.event_name == 'workflow_dispatch'
         run: echo "has_changes=true" >> $GITHUB_OUTPUT
-
-      - name: Cache commit hashes
-        if: always()
-        uses: actions/cache@v4
-        with:
-          path: .cache
-          key: ${{ runner.os }}-commit-cache-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-commit-cache-
 
   build:
     needs: check
     if: needs.check.outputs.should_build == 'true'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         arch:
           - aarch64_generic
           - x86_64
         branch:
-          - openwrt-23.05
           - openwrt-24.10
           - SNAPSHOT
 
@@ -70,48 +65,58 @@ jobs:
             git clone "https://github.com/$repo" "package/$(basename $repo)"
           done < buildlist.txt
 
+      - name: Prepare package list
+        id: pkglist
+        run: |
+          pkg_list=""
+          while IFS= read -r repo; do
+            [ -z "$repo" ] && continue
+            pkg_name=$(basename $repo)
+            pkg_list="$pkg_list $pkg_name"
+          done < buildlist.txt
+          echo "packages=${pkg_list# }" >> $GITHUB_OUTPUT
+          echo "date=$(date '+%Y%m%d')" >> $GITHUB_OUTPUT
+
       - name: Build packages
         uses: openwrt/gh-action-sdk@main
-        with:
-          arch: ${{ matrix.arch }}
-          branch: ${{ matrix.branch }}
-          
-      - name: Package artifacts by type
-        run: |
-          cd bin/packages/${{ matrix.arch }}/packages/
-          for pkg in speedtest-ex node-exporter boltbrowser; do
-            if [ "${{ matrix.branch }}" = "SNAPSHOT" ]; then
-              find . -name "${pkg}*.apk" -exec tar -czf ${pkg}_${{ matrix.arch }}_${{ matrix.branch }}.tar.gz {} +
-            else
-              find . -name "${pkg}*.ipk" -exec tar -czf ${pkg}_${{ matrix.arch }}_${{ matrix.branch }}.tar.gz {} +
-            fi
-          done
+        env:
+          ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
+          FEEDNAME: build
+          PACKAGES: ${{ steps.pkglist.outputs.packages }}
+          NO_REFRESH_CHECK: true
+          IGNORE_ERRORS: true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: packages-${{ matrix.arch }}-${{ matrix.branch }}
-          path: |
-            bin/packages/${{ matrix.arch }}/packages/*.ipk
-            bin/packages/${{ matrix.arch }}/packages/*.apk
-            bin/packages/${{ matrix.arch }}/packages/*.tar.gz
+          path: bin/packages/${{ matrix.arch }}/build/*
 
-      - name: Create Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: softprops/action-gh-release@v2.2.1
+      - name: Create release
+        continue-on-error: true
+        uses: ncipollo/release-action@v1.14.0
         with:
-          files: |
-            bin/packages/${{ matrix.arch }}/packages/*.tar.gz
-          name: Release ${{ github.sha }}
-          tag_name: release-${{ github.sha }}
-          generate_release_notes: true
+          name: ${{ steps.pkglist.outputs.date }}
+          allowUpdates: true
+          tag: ${{ steps.pkglist.outputs.date }}
+          commit: ${{ steps.pkglist.outputs.date }}
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: "bin/packages/${{ matrix.arch }}/build/*"
+
+  cleanup:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear GitHub Actions Cache
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh cache delete --all
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@main
         with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            repository: ${{ github.repository }}
-            retain_days: 0
-            keep_minimum_runs: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 2
