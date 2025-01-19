@@ -90,7 +90,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: packages-${{ matrix.arch }}-${{ matrix.branch }}
-          path: bin/packages/${{ matrix.arch }}/build/*
+          path: bin/packages/${{ matrix.arch }}/build/*pk
 
       - name: Create release
         continue-on-error: true
@@ -102,14 +102,14 @@ jobs:
           commit: main
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "bin/packages/${{ matrix.arch }}/build/*"
+          artifacts: "bin/packages/${{ matrix.arch }}/build/*pk"
 
   cleanup:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Clear GitHub Actions Cache
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
