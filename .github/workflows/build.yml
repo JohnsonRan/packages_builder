@@ -86,6 +86,17 @@ jobs:
           NO_REFRESH_CHECK: true
           IGNORE_ERRORS: true
 
+      - name: Rename SNAPSHOT packages
+        if: matrix.branch == 'SNAPSHOT'
+        run: |
+          cd bin/packages/${{ matrix.arch }}/build/
+          for pkg in *.apk; do
+            if [[ -f "$pkg" && $pkg != *_${{ matrix.arch }}.apk ]]; then
+              new_name="${pkg%.apk}_${{ matrix.arch }}.apk"
+              mv "$pkg" "$new_name"
+            fi
+          done
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
