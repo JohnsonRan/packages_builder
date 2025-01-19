@@ -108,6 +108,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      
       - name: Clear GitHub Actions Cache
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
