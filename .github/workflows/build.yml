@@ -99,7 +99,7 @@ jobs:
           name: ${{ steps.pkglist.outputs.date }}
           allowUpdates: true
           tag: ${{ steps.pkglist.outputs.date }}
-          commit: ${{ steps.pkglist.outputs.date }}
+          commit: main
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "bin/packages/${{ matrix.arch }}/build/*"
