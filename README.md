@@ -1,5 +1,6 @@
 
 # 项目会在北京时间 8:30 检查更新，如有更新会自动编译
+https://github.com/JohnsonRan/packages_builder/releases
 ## Speedtest-EX
 https://github.com/JohnsonRan/packages_net_speedtest-ex
 - 配置文件位于 `/etc/speedtest-ex/config.toml`
