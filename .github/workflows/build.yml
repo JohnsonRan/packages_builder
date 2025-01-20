@@ -78,7 +78,7 @@ jobs:
           echo "date=$(date '+%Y%m%d')" >> $GITHUB_OUTPUT
 
       - name: Build packages
-        uses: openwrt/gh-action-sdk@main
+        uses: JohnsonRan/gh-action-sdk@main
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
           FEEDNAME: build
