@@ -21,3 +21,10 @@ https://github.com/JohnsonRan/packages_utils_boltbrowser
 boltbrowser /etc/mihomo/run/cache.db
 ```
 - 若不再需要直接前往软件包处删除 `boltbrowser` 即可
+
+## neko-status
+https://github.com/JohnsonRan/packages_utils_neko-status  
+https://github.com/fev125/dstatus
+- 探针被控端
+- 配置文件位于 `/etc/neko-status/config.yaml`
+- 若不再需要直接前往软件包处删除 `neko-status` 即可
