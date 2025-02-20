@@ -2,3 +2,4 @@ JohnsonRan/packages_utils_node_exporter
 JohnsonRan/packages_net_speedtest-ex
 JohnsonRan/packages_utils_boltbrowser
 JohnsonRan/packages_utils_neko-status
+JohnsonRan/packages_net_v2ray-geodata
