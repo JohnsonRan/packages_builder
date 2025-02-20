@@ -96,7 +96,7 @@ jobs:
               mv "$pkg" "$new_name"
             fi
           done
-          rm -rf v2ray-geosite-ir_*
+          rm -rf v2ray-geosite-ir*
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
