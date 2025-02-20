@@ -86,7 +86,7 @@ jobs:
           NO_REFRESH_CHECK: true
           IGNORE_ERRORS: true
 
-      - name: Rename SNAPSHOT packages
+      - name: Process packages
         if: matrix.branch == 'SNAPSHOT'
         run: |
           cd bin/packages/${{ matrix.arch }}/build/
@@ -96,6 +96,7 @@ jobs:
               mv "$pkg" "$new_name"
             fi
           done
+          rm -rf v2ray-geosite-ir_*
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
