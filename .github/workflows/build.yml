@@ -21,7 +21,7 @@ jobs:
           today=$(date -u '+%Y-%m-%d')
           has_changes=false
           
-          for repo in $(grep -v '^$' buildlist.txt); do
+          for repo in $(grep -v '^$' sourcelist.txt); do
             echo "Checking $repo..."
             # 获取最新提交的日期
             latest_commit_date=$(curl -s "https://api.github.com/repos/$repo/commits?per_page=1" | jq -r '.[0].commit.committer.date[:10]')
@@ -63,18 +63,22 @@ jobs:
             [ -z "$repo" ] && continue
             echo "Cloning $repo..."
             git clone "https://github.com/$repo" "sources/$(basename $repo)"
-          done < buildlist.txt
+          done < sourcelist.txt
           bash hack.sh
 
-      - name: Prepare package list
+      - name: Fetch packages
+        run: |
+          feeds_list=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/main/packages.txt")
+          echo "packages_list=$feeds_list" >> $GITHUB_ENV
+
+      - name: Show build info
         id: pkglist
         run: |
-          pkg_list=""
-          while IFS= read -r repo; do
-            [ -z "$repo" ] && continue
-            pkg_name=$(basename $repo)
-            pkg_list="$pkg_list $pkg_name"
-          done < buildlist.txt
+          echo -e "\n\e[1;32mMemory:\e[0m"
+          sudo free -h
+          echo -e "\e[1;32mAvailable Storage:\e[0m"
+          sudo df -Th
+          echo -e "PACKAGES: ${{ env.packages_list }}"
           echo "packages=${pkg_list# }" >> $GITHUB_OUTPUT
           echo "date=$(date '+%Y%m%d')" >> $GITHUB_OUTPUT
 
@@ -83,7 +87,6 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
           FEEDNAME: build
-          PACKAGES: ${{ steps.pkglist.outputs.packages }}
           NO_REFRESH_CHECK: true
           NO_SHFMT_CHECK: true
           IGNORE_ERRORS: true
