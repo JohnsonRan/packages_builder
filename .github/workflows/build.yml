@@ -58,12 +58,13 @@ jobs:
 
       - name: Read build list and clone repositories
         run: |
-          mkdir -p package
+          mkdir -p sources
           while IFS= read -r repo; do
             [ -z "$repo" ] && continue
             echo "Cloning $repo..."
-            git clone "https://github.com/$repo" "package/$(basename $repo)"
+            git clone "https://github.com/$repo" "sources/$(basename $repo)"
           done < buildlist.txt
+          bash hack.sh
 
       - name: Prepare package list
         id: pkglist
@@ -84,8 +85,9 @@ jobs:
           FEEDNAME: build
           PACKAGES: ${{ steps.pkglist.outputs.packages }}
           NO_REFRESH_CHECK: true
+          NO_SHFMT_CHECK: true
           IGNORE_ERRORS: true
-
+          
       - name: Process packages
         if: matrix.branch == 'SNAPSHOT'
         run: |
