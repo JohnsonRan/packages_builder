@@ -1,9 +1,24 @@
 
-# 项目会在北京时间 8:30 检查更新，如有更新会自动编译
+# InfinitySubstance
 
-<https://github.com/JohnsonRan/packages_builder/releases>
+## 安装
 
-## Speedtest-EX
+- 添加源
+
+```shell
+# only needs to be run once
+curl -s -L https://github.com/JohnsonRan/InfinitySubstance/raw/main/feed.sh | ash
+```
+
+***截至目前，可通过源安装如下软件包***
+
+### InfinityDuck
+
+<https://github.com/JohnsonRan/InfinityDuck>
+
+- dae 的另一个 LuCI 应用
+
+### Speedtest-EX
 
 <https://github.com/JohnsonRan/packages_net_speedtest-ex>
 
@@ -12,7 +27,7 @@
 - 默认运行在 `8989` 端口
 - 若不再需要直接前往软件包处删除 `speedtest-ex` 即可
 
-## Node exporter
+### Node exporter
 
 <https://github.com/JohnsonRan/packages_utils_node_exporter>
 
@@ -20,7 +35,7 @@
 - 端口为默认 `9100`
 - 若不再需要直接前往软件包处删除 `node_exporter` 即可
 
-## boltbrowser
+### boltbrowser
 
 <https://github.com/JohnsonRan/packages_utils_boltbrowser>
 
@@ -32,7 +47,7 @@ boltbrowser /etc/mihomo/run/cache.db
 
 - 若不再需要直接前往软件包处删除 `boltbrowser` 即可
 
-## neko-status
+### neko-status
 
 <https://github.com/JohnsonRan/packages_utils_neko-status>  
 <https://github.com/fev125/dstatus>
@@ -41,6 +56,12 @@ boltbrowser /etc/mihomo/run/cache.db
 - 配置文件位于 `/etc/neko-status/config.yaml`
 - 若不再需要直接前往软件包处删除 `neko-status` 即可
 
-## v2ray-geodata
+### v2ray-geodata
 
 替换为 <https://github.com/MetaCubeX/meta-rules-dat>
+
+### 特别感谢
+
+- [morytyann](http://github.com/morytyann)
+- [AopisL](https://github.com/apoiston)
+- [WJQSERVER](https://github.com/WJQSERVER)
