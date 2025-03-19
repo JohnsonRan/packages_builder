@@ -7,7 +7,7 @@ on:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       should_build: ${{ github.event_name == 'workflow_dispatch' || steps.check-updates.outputs.has_changes }}
 
@@ -70,6 +70,10 @@ jobs:
         run: |
           feeds_list=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/main/packages.txt")
           echo "packages_list=$feeds_list" >> $GITHUB_ENV
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/lib/{jvm,llvm} /usr/local /usr/src/* /var/lib/gems /var/lib/mysql /var/lib/snapd /etc/skel /opt/{microsoft,az,hostedtoolcache,cni,mssql-tools,pipx} /usr/share/{az*,dotnet,swift,miniconda,gradle*,java,kotlinc,ri,sbt} /root/{.sbt,.local,.npm} /usr/libexec/gcc/x86_64-linux-gnu/14 /usr/lib/x86_64-linux-gnu/{*clang*,*LLVM*} /home/linuxbrew
 
       - name: Show build info
         id: pkglist
