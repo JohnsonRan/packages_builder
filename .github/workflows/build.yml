@@ -90,7 +90,8 @@ jobs:
         uses: JohnsonRan/gh-action-sdk@main
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
-          FEEDNAME: build
+          FEEDNAME: infinity
+          INDEX: 1
           NO_REFRESH_CHECK: true
           NO_SHFMT_CHECK: true
           IGNORE_ERRORS: true
@@ -107,11 +108,18 @@ jobs:
           done
           rm -rf v2ray-geosite-ir*
 
+      - name: compress
+        run: |
+          tar -c -z -f infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz -C bin/packages/${{ matrix.arch }}/infinity .
+          mkdir -p public/${{ matrix.branch }}/${{ matrix.arch }}
+          mv bin/packages/${{ matrix.arch }}/infinity public/${{ matrix.branch }}/${{ matrix.arch }}
+          tar -c -z -f feed_infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz public/${{ matrix.branch }}/${{ matrix.arch }}
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: packages-${{ matrix.arch }}-${{ matrix.branch }}
-          path: bin/packages/${{ matrix.arch }}/build/*pk
+          name: feed_infinity_${{ matrix.arch }}-${{ matrix.branch }}
+          path: feed_infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz
 
       - name: Create release
         continue-on-error: true
@@ -123,7 +131,34 @@ jobs:
           commit: main
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "bin/packages/${{ matrix.arch }}/build/*pk"
+          artifacts: "infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz"
+
+  feed:
+    needs: build
+    name: feed
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: download
+        uses: actions/download-artifact@v4
+        with:
+          pattern: feed_infinity_*
+          merge-multiple: true
+      
+      - name: uncompress
+        run: |
+          for file in feed_infinity_*.tar.gz; do tar -x -z -f "$file"; done
+      
+      - name: key
+        run: |
+          echo "${{ secrets.KEY_BUILD_PUB }}" > public/key-build.pub
+
+      - name: feed
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force_orphan: true
+          commit_message: "release: ${{ github.ref_name }}"
 
   cleanup:
     needs: build
