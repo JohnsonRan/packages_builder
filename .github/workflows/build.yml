@@ -90,7 +90,7 @@ jobs:
         uses: JohnsonRan/gh-action-sdk@main
         env:
           ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
-          FEEDNAME: infinity
+          FEEDNAME: InfinitySubstance
           INDEX: 1
           NO_REFRESH_CHECK: true
           NO_SHFMT_CHECK: true
@@ -110,16 +110,16 @@ jobs:
 
       - name: compress
         run: |
-          tar -c -z -f infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz -C bin/packages/${{ matrix.arch }}/infinity .
+          tar -c -z -f InfinitySubstance_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz -C bin/packages/${{ matrix.arch }}/InfinitySubstance .
           mkdir -p public/${{ matrix.branch }}/${{ matrix.arch }}
-          mv bin/packages/${{ matrix.arch }}/infinity public/${{ matrix.branch }}/${{ matrix.arch }}
-          tar -c -z -f feed_infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz public/${{ matrix.branch }}/${{ matrix.arch }}
+          mv bin/packages/${{ matrix.arch }}/InfinitySubstance public/${{ matrix.branch }}/${{ matrix.arch }}
+          tar -c -z -f feed_InfinitySubstance_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz public/${{ matrix.branch }}/${{ matrix.arch }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: feed_infinity_${{ matrix.arch }}-${{ matrix.branch }}
-          path: feed_infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz
+          name: feed_InfinitySubstance_${{ matrix.arch }}-${{ matrix.branch }}
+          path: feed_InfinitySubstance_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz
 
       - name: Create release
         continue-on-error: true
@@ -131,7 +131,7 @@ jobs:
           commit: main
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "infinity_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz"
+          artifacts: "InfinitySubstance_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz"
 
   feed:
     needs: build
@@ -142,12 +142,12 @@ jobs:
       - name: download
         uses: actions/download-artifact@v4
         with:
-          pattern: feed_infinity_*
+          pattern: feed_InfinitySubstance_*
           merge-multiple: true
       
       - name: uncompress
         run: |
-          for file in feed_infinity_*.tar.gz; do tar -x -z -f "$file"; done
+          for file in feed_InfinitySubstance_*.tar.gz; do tar -x -z -f "$file"; done
       
       - name: key
         run: |
@@ -161,7 +161,7 @@ jobs:
           commit_message: "release: ${{ github.ref_name }}"
 
   cleanup:
-    needs: build
+    needs: feed
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
