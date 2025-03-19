@@ -92,6 +92,7 @@ jobs:
           ARCH: ${{ matrix.arch }}-${{ matrix.branch }}
           FEEDNAME: InfinitySubstance
           INDEX: 1
+          KEY_BUILD: ${{ secrets.KEY_BUILD }}
           NO_REFRESH_CHECK: true
           NO_SHFMT_CHECK: true
           IGNORE_ERRORS: true
