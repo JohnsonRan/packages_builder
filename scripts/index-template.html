@@ -228,13 +228,14 @@
     }
     
     .search-container {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
     }
     
     #search-input {
       padding: 0.5rem;
+      padding-left: 2rem;
       border: 1px solid var(--border-color);
       border-radius: 0.25rem;
       font-size: 0.875rem;
@@ -242,11 +243,26 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       margin-left: 8px;
+      position: relative;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      z-index: 1;
+      pointer-events: none;
+      color: var(--text-light);
     }
     
     .header-cell {
       display: flex;
       align-items: center;
+      height: 100%;
     }
     
     .sortable {
@@ -285,7 +301,13 @@
           <th>
             <div class="header-cell">
               <span class="sortable" data-sort="name">NAME</span>
-              <input type="text" id="search-input" placeholder="Search">
+              <div class="search-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="search-input" placeholder="Search">
+              </div>
             </div>
           </th>
           <th>
