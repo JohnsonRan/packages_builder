@@ -147,6 +147,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v4
+      
       - name: download
         uses: actions/download-artifact@v4
         with:
@@ -160,6 +162,10 @@ jobs:
       - name: key
         run: |
           echo "${{ secrets.KEY_BUILD_PUB }}" > public/key-build.pub
+
+      - name: generate index
+        run: |
+          ./scripts/generate-index.sh public
 
       - name: feed
         uses: peaceiris/actions-gh-pages@v4

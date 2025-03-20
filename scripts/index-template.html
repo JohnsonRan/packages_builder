@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{TITLE}}</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 { 
+      color: #333;
+      margin-bottom: 20px;
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td { 
+      padding: 10px; 
+      text-align: left; 
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f8f8f8;
+      font-weight: bold;
+    }
+    tr:hover { 
+      background-color: #f5f5f5; 
+    }
+    a { 
+      text-decoration: none; 
+      color: #0366d6;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .dir { 
+      font-weight: bold; 
+      color: #6f42c1;
+    }
+    .size { 
+      text-align: right;
+      width: 100px;
+    }
+    .date { 
+      color: #666;
+      width: 200px;
+    }
+    .path { 
+      margin-bottom: 15px; 
+      padding: 8px; 
+      background: #f1f1f1; 
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    footer {
+      margin-top: 40px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{TITLE}}</h1>
+  <div class="path">当前路径: {{PATH}}</div>
+  <table>
+    <tr>
+      <th>名称</th>
+      <th>大小</th>
+      <th>修改时间</th>
+    </tr>
+    {{CONTENT}}
+  </table>
+  <footer>
+    生成于 {{TIMESTAMP}} | <a href="https://github.com/{{REPO}}">GitHub 仓库</a>
+  </footer>
+</body>
+</html>
