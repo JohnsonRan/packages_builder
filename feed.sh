@@ -22,7 +22,7 @@ case "$DISTRIB_RELEASE" in
 esac
 
 # feed url
-repository_url="https://johnsonran.github.io/InfinitySubstance/"
+repository_url="https://opkg.ihtw.moe"
 feed_url="$repository_url/$branch/$arch/InfinitySubstance"
 
 if [ -x "/bin/opkg" ]; then

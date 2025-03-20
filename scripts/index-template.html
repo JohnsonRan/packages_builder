@@ -5,81 +5,166 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{TITLE}}</title>
   <style>
+    :root {
+      --primary-color: #4f46e5;
+      --hover-color: #4338ca;
+      --dir-color: #8b5cf6;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --bg-color: #ffffff;
+      --bg-accent: #f9fafb;
+      --border-color: #e5e7eb;
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: #6366f1;
+        --hover-color: #818cf8;
+        --dir-color: #a78bfa;
+        --text-color: #e5e7eb;
+        --text-light: #9ca3af;
+        --bg-color: #111827;
+        --bg-accent: #1f2937;
+        --border-color: #374151;
+        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+      }
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body { 
-      font-family: Arial, sans-serif; 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       max-width: 1200px; 
       margin: 0 auto; 
-      padding: 20px;
+      padding: 2rem 1rem;
       line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      transition: background-color 0.3s, color 0.3s;
     }
+    
     h1 { 
-      color: #333;
-      margin-bottom: 20px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
     }
+    
+    .container {
+      background-color: var(--bg-accent);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    
+    .path-container { 
+      margin-bottom: 1.5rem; 
+      padding: 0.75rem 1rem; 
+      background: var(--bg-accent); 
+      border-radius: 0.375rem;
+      border: 1px solid var(--border-color);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+    
     table { 
       width: 100%; 
       border-collapse: collapse;
-      margin-bottom: 30px;
     }
+    
     th, td { 
-      padding: 10px; 
+      padding: 0.75rem 1rem; 
       text-align: left; 
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid var(--border-color);
     }
+    
     th {
-      background-color: #f8f8f8;
-      font-weight: bold;
+      background-color: var(--bg-accent);
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
+    
     tr:hover { 
-      background-color: #f5f5f5; 
+      background-color: var(--bg-accent); 
     }
+    
     a { 
       text-decoration: none; 
-      color: #0366d6;
+      color: var(--primary-color);
+      transition: color 0.2s;
     }
+    
     a:hover {
+      color: var(--hover-color);
       text-decoration: underline;
     }
+    
     .dir { 
-      font-weight: bold; 
-      color: #6f42c1;
+      font-weight: 600; 
+      color: var(--dir-color);
     }
+    
     .size { 
       text-align: right;
       width: 100px;
+      color: var(--text-light);
     }
+    
     .date { 
-      color: #666;
+      color: var(--text-light);
       width: 200px;
     }
-    .path { 
-      margin-bottom: 15px; 
-      padding: 8px; 
-      background: #f1f1f1; 
-      border-radius: 3px;
-      font-family: monospace;
-    }
+    
     footer {
-      margin-top: 40px;
-      padding-top: 10px;
-      border-top: 1px solid #eee;
-      color: #666;
-      font-size: 12px;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-light);
+      font-size: 0.875rem;
       text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .date {
+        display: none;
+      }
+      
+      .size {
+        width: 70px;
+      }
     }
   </style>
 </head>
 <body>
   <h1>{{TITLE}}</h1>
-  <div class="path">当前路径: {{PATH}}</div>
-  <table>
-    <tr>
-      <th>名称</th>
-      <th>大小</th>
-      <th>修改时间</th>
-    </tr>
-    {{CONTENT}}
-  </table>
+  <div class="path-container">{{PATH}}</div>
+  
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>名称</th>
+          <th>大小</th>
+          <th class="date">修改时间</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{CONTENT}}
+      </tbody>
+    </table>
+  </div>
+  
   <footer>
     生成于 {{TIMESTAMP}} | <a href="https://github.com/{{REPO}}">GitHub 仓库</a>
   </footer>
