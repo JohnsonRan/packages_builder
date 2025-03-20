@@ -144,6 +144,7 @@ jobs:
         run: |
           bash scripts/generate-index.sh public
           echo 'opkg.ihtw.moe' > ./public/CNAME
+          cp README.md public/
 
       - name: feed
         uses: peaceiris/actions-gh-pages@v4

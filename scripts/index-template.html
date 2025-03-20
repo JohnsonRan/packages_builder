@@ -144,6 +144,87 @@
         width: 70px;
       }
     }
+    
+    .readme-container {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: var(--bg-accent);
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow);
+      display: none;
+    }
+    
+    .readme-container h2 {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .readme-content {
+      overflow-wrap: break-word;
+    }
+    
+    .readme-content img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .readme-content pre {
+      padding: 1rem;
+      background-color: var(--bg-color);
+      border-radius: 0.25rem;
+      overflow-x: auto;
+    }
+    
+    .readme-content code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+    }
+    
+    .readme-content pre code {
+      padding: 0;
+      background-color: transparent;
+    }
+    
+    .readme-content code:not(pre code) {
+      padding: 0.2rem 0.4rem;
+      background-color: var(--bg-color);
+      border-radius: 0.25rem;
+    }
+    
+    .readme-content blockquote {
+      padding-left: 1rem;
+      border-left: 4px solid var(--border-color);
+      color: var(--text-light);
+      margin: 1rem 0;
+    }
+    
+    .readme-content table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    
+    .readme-content h1, 
+    .readme-content h2, 
+    .readme-content h3, 
+    .readme-content h4, 
+    .readme-content h5, 
+    .readme-content h6 {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .readme-content p {
+      margin: 0.75rem 0;
+    }
+    
+    .readme-content ul, 
+    .readme-content ol {
+      margin: 0.75rem 0;
+      padding-left: 1.5rem;
+    }
   </style>
 </head>
 <body>
@@ -165,8 +246,47 @@
     </table>
   </div>
   
+  <div id="readme-container" class="readme-container">
+    <div id="readme-content" class="readme-content">
+    </div>
+  </div>
+  
   <footer>
-    生成于 {{TIMESTAMP}} | <a href="https://github.com/{{REPO}}">GitHub 仓库</a>
+    生成于 {{TIMESTAMP}} | <a href="https://github.com/{{REPO}}">GitHub</a>
   </footer>
+
+  <script src="https://unpkg.com/marked@latest/marked.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('README.md')
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          }
+          throw new Error('README.md not found');
+        })
+        .then(markdown => {
+          document.getElementById('readme-content').innerHTML = marked.parse(markdown);
+          document.getElementById('readme-container').style.display = 'block';
+          
+          document.querySelectorAll('#readme-content a').forEach(link => {
+            if (link.getAttribute('href') && !link.getAttribute('href').startsWith('http') && 
+                !link.getAttribute('href').startsWith('#') && !link.getAttribute('href').startsWith('/')) {
+              link.setAttribute('href', link.getAttribute('href'));
+            }
+          });
+          
+          document.querySelectorAll('#readme-content img').forEach(img => {
+            if (img.getAttribute('src') && !img.getAttribute('src').startsWith('http') && 
+                !img.getAttribute('src').startsWith('/')) {
+              img.setAttribute('src', img.getAttribute('src'));
+            }
+          });
+        })
+        .catch(error => {
+          console.log('No README found or other error occurred:', error);
+        });
+    });
+  </script>
 </body>
 </html>
