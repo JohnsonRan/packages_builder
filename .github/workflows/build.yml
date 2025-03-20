@@ -5,6 +5,9 @@ on:
     - cron: '30 0 * * *' 
   workflow_dispatch:
 
+env:
+  TZ: Asia/Shanghai
+
 jobs:
   check:
     runs-on: ubuntu-24.04
