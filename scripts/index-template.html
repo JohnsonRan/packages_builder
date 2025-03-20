@@ -65,7 +65,7 @@
       margin-bottom: 2rem;
     }
     
-    .path-container { 
+    .path-finder { 
       margin-bottom: 1.5rem; 
       padding: 0.75rem 1rem; 
       background: var(--bg-accent); 
@@ -75,6 +75,21 @@
       font-size: 0.875rem;
       white-space: nowrap;
       overflow-x: auto;
+    }
+    
+    .path-finder a {
+      display: inline-block;
+      padding: 0 0.25rem;
+    }
+    
+    .path-finder a:hover {
+      background-color: rgba(0,0,0,0.05);
+      border-radius: 0.25rem;
+    }
+    
+    .path-separator {
+      margin: 0 0.25rem;
+      color: var(--text-light);
     }
     
     table { 
@@ -293,7 +308,7 @@
   </style>
 </head>
 <body>
-  <div class="path-container">{{PATH}}</div>
+  <div class="path-finder">{{PATH}}</div>
   
   <div class="container">
     <table>
@@ -341,6 +356,37 @@
   <script src="https://unpkg.com/marked@latest/marked.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      const pathContainer = document.querySelector('.path-finder');
+      const pathText = pathContainer.textContent.trim();
+      
+      if (pathText) {
+        const pathParts = pathText.split('/').filter(Boolean);
+        let pathLinks = [];
+        
+        pathLinks.push('<a href="/">/</a>');
+        
+        let currentPath = '';
+        for (let i = 0; i < pathParts.length; i++) {
+          currentPath += '/' + pathParts[i];
+          
+          if (i === pathParts.length - 1) {
+            pathLinks.push(`<span>${pathParts[i]}</span>`);
+          } else {
+            pathLinks.push(`<a href="${currentPath}/">${pathParts[i]}</a>`);
+          }
+        }
+        
+        pathContainer.innerHTML = pathLinks.join(' <span class="path-separator">&gt;</span> ');
+      }
+      
+      pathContainer.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+        
+        e.preventDefault();
+        window.location.href = link.getAttribute('href');
+      });
+    
       if (window.location.pathname.endsWith('/index.html')) {
         const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/');
         window.history.replaceState(null, document.title, cleanPath);
