@@ -226,6 +226,53 @@
       margin: 0.75rem 0;
       padding-left: 1.5rem;
     }
+    
+    .search-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    #search-input {
+      padding: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      width: 200px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin-left: 8px;
+    }
+    
+    .header-cell {
+      display: flex;
+      align-items: center;
+    }
+    
+    .sortable {
+      cursor: pointer;
+      position: relative;
+      padding-right: 1.5rem;
+    }
+    
+    .sortable::after {
+      content: "⇅";
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.4;
+    }
+    
+    .sort-asc::after {
+      content: "↑";
+      opacity: 1;
+    }
+    
+    .sort-desc::after {
+      content: "↓";
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -235,9 +282,22 @@
     <table>
       <thead>
         <tr>
-          <th>NAME</th>
-          <th>SIZE</th>
-          <th class="date">MODIFIED</th>
+          <th>
+            <div class="header-cell">
+              <span class="sortable" data-sort="name">NAME</span>
+              <input type="text" id="search-input" placeholder="Search">
+            </div>
+          </th>
+          <th>
+            <div class="header-cell">
+              <span class="sortable" data-sort="size">SIZE</span>
+            </div>
+          </th>
+          <th class="date">
+            <div class="header-cell">
+              <span class="sortable" data-sort="date">MODIFIED</span>
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -258,6 +318,109 @@
   <script src="https://unpkg.com/marked@latest/marked.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      const searchInput = document.getElementById('search-input');
+      const tableRows = Array.from(document.querySelectorAll('tbody tr'));
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        tableRows.forEach(row => {
+          const name = row.querySelector('td:first-child').textContent.toLowerCase();
+          if (name.includes(searchTerm)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+
+      searchInput.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+      
+      const sortableHeaders = document.querySelectorAll('.sortable');
+      let currentSort = { column: 'name', direction: 'asc' };
+      
+      function sortTable(column, direction) {
+        const tbody = document.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        const sortedRows = rows.sort((a, b) => {
+          const aValue = a.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+          const bValue = b.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+          
+          if (column === 'size') {
+            return compareSize(aValue, bValue) * (direction === 'asc' ? 1 : -1);
+          } else if (column === 'date') {
+            return new Date(aValue) - new Date(bValue) * (direction === 'asc' ? 1 : -1);
+          } else {
+            const aIsDir = a.querySelector('.dir') !== null;
+            const bIsDir = b.querySelector('.dir') !== null;
+            
+            if (aIsDir && !bIsDir) return -1;
+            if (!aIsDir && bIsDir) return 1;
+            
+            return aValue.localeCompare(bValue) * (direction === 'asc' ? 1 : -1);
+          }
+        });
+        
+        while (tbody.firstChild) {
+          tbody.removeChild(tbody.firstChild);
+        }
+        
+        sortedRows.forEach(row => tbody.appendChild(row));
+      }
+      
+      function getColumnIndex(column) {
+        switch (column) {
+          case 'name': return 1;
+          case 'size': return 2;
+          case 'date': return 3;
+          default: return 1;
+        }
+      }
+      
+      function compareSize(a, b) {
+        if (a === '-' && b === '-') return 0;
+        if (a === '-') return -1;
+        if (b === '-') return 1;
+        
+        const units = { B: 1, KB: 1024, MB: 1024*1024, GB: 1024*1024*1024 };
+        
+        function parseSize(size) {
+          const parts = size.split(' ');
+          if (parts.length === 2) {
+            return parseFloat(parts[0]) * units[parts[1]];
+          }
+          return parseFloat(size);
+        }
+        
+        return parseSize(a) - parseSize(b);
+      }
+      
+      sortableHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+          const column = this.dataset.sort;
+          let direction = 'asc';
+          
+          sortableHeaders.forEach(h => {
+            h.classList.remove('sort-asc', 'sort-desc');
+          });
+          
+          if (currentSort.column === column) {
+            direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+          }
+          
+          this.classList.add(direction === 'asc' ? 'sort-asc' : 'sort-desc');
+          
+          currentSort = { column, direction };
+          
+          sortTable(column, direction);
+        });
+      });
+      
+      document.querySelector('[data-sort="name"]').classList.add('sort-asc');
+      sortTable('name', 'asc');
+      
       fetch('README.md')
         .then(response => {
           if (response.ok) {
