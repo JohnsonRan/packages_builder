@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{TITLE}}</title>
   <link rel="icon" href="https://avatars.githubusercontent.com/u/89735151">
+  <base href=".">
   <style>
     :root {
       --primary-color: #4f46e5;
@@ -340,6 +341,22 @@
   <script src="https://unpkg.com/marked@latest/marked.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      if (window.location.pathname.endsWith('/index.html')) {
+        const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/');
+        window.history.replaceState(null, document.title, cleanPath);
+      }
+      
+      document.querySelector('tbody').addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+        
+        const href = link.getAttribute('href');
+        if (href && href.endsWith('/index.html')) {
+          e.preventDefault();
+          window.location.href = href.replace(/\/index\.html$/, '/');
+        }
+      });
+      
       const searchInput = document.getElementById('search-input');
       const tableRows = Array.from(document.querySelectorAll('tbody tr'));
       
