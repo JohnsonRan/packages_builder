@@ -49,25 +49,7 @@ jobs:
         arch:
           - aarch64_generic
           - x86_64
-          - arm_cortex-a5_vfpv4
-          - arm_cortex-a7_neon-vfpv4
-          - arm_cortex-a8_vfpv3
-          - arm_cortex-a9
-          - arm_cortex-a9_vfpv3-d16
-          - arm_cortex-a9_neon
-          - arm_cortex-a15_neon-vfpv4
           - aarch64_cortex-a53
-          - aarch64_cortex-a72
-          - aarch64_cortex-a76
-          - mips_24kc
-          - mips_4kec
-          - mips_mips32
-          - mipsel_24kc
-          - mipsel_24kc_24kf
-          - mipsel_74kc
-          - mipsel_mips32
-          - mips64_octeonplus
-          - i386_pentium4
         branch:
           - openwrt-24.10
           - SNAPSHOT
@@ -85,14 +67,9 @@ jobs:
           done < sourcelist.txt
           bash hack.sh
 
-      - name: Fetch packages
-        run: |
-          feeds_list=$(curl -s "https://raw.githubusercontent.com/${{ github.repository }}/main/packages.txt")
-          echo "packages_list=$feeds_list" >> $GITHUB_ENV
-
-      - name: Free disk space
-        run: |
-          sudo rm -rf /usr/lib/{jvm,llvm} /usr/local /usr/src/* /var/lib/gems /var/lib/mysql /var/lib/snapd /etc/skel /opt/{microsoft,az,hostedtoolcache,cni,mssql-tools,pipx} /usr/share/{az*,dotnet,swift,miniconda,gradle*,java,kotlinc,ri,sbt} /root/{.sbt,.local,.npm} /usr/libexec/gcc/x86_64-linux-gnu/14 /usr/lib/x86_64-linux-gnu/{*clang*,*LLVM*} /home/linuxbrew
+#      - name: Free disk space
+#        run: |
+#          sudo rm -rf /usr/lib/{jvm,llvm} /usr/local /usr/src/* /var/lib/gems /var/lib/mysql /var/lib/snapd /etc/skel /opt/{microsoft,az,hostedtoolcache,cni,mssql-tools,pipx} /usr/share/{az*,dotnet,swift,miniconda,gradle*,java,kotlinc,ri,sbt} /root/{.sbt,.local,.npm} /usr/libexec/gcc/x86_64-linux-gnu/14 /usr/lib/x86_64-linux-gnu/{*clang*,*LLVM*} /home/linuxbrew
 
       - name: Show build info
         id: pkglist
@@ -101,7 +78,7 @@ jobs:
           sudo free -h
           echo -e "\e[1;32mAvailable Storage:\e[0m"
           sudo df -Th
-          echo -e "PACKAGES: ${{ env.packages_list }}"
+          echo -e "PACKAGES: $(cat packages.txt)"
           echo "packages=${pkg_list# }" >> $GITHUB_OUTPUT
           echo "date=$(date '+%Y%m%d')" >> $GITHUB_OUTPUT
 
@@ -165,7 +142,7 @@ jobs:
 
       - name: generate index
         run: |
-          ./scripts/generate-index.sh public
+          bash scripts/generate-index.sh public
 
       - name: feed
         uses: peaceiris/actions-gh-pages@v4
@@ -177,6 +154,7 @@ jobs:
   cleanup:
     needs: feed
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v4
 
