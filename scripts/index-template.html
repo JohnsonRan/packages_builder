@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{TITLE}}</title>
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/89735151">
   <style>
     :root {
       --primary-color: #4f46e5;
@@ -228,16 +229,15 @@
   </style>
 </head>
 <body>
-  <h1>{{TITLE}}</h1>
   <div class="path-container">{{PATH}}</div>
   
   <div class="container">
     <table>
       <thead>
         <tr>
-          <th>名称</th>
-          <th>大小</th>
-          <th class="date">修改时间</th>
+          <th>NAME</th>
+          <th>SIZE</th>
+          <th class="date">MODIFIED</th>
         </tr>
       </thead>
       <tbody>
@@ -252,7 +252,7 @@
   </div>
   
   <footer>
-    生成于 {{TIMESTAMP}} | <a href="https://github.com/{{REPO}}">GitHub</a>
+    Last update: {{TIMESTAMP}} | <a href="https://github.com/{{REPO}}">GitHub</a>
   </footer>
 
   <script src="https://unpkg.com/marked@latest/marked.min.js"></script>

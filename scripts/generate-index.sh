@@ -71,7 +71,7 @@ function generate_html() {
   local timestamp=$(date "+%Y-%m-%d %H:%M:%S")
   
   cp "$template" "$html_file.tmp"
-  sed -i "s|{{TITLE}}|InfinitySubstance 软件包索引|g" "$html_file.tmp"
+  sed -i "s|{{TITLE}}|InfinitySubstance - Extra Packages for OpenWrt|g" "$html_file.tmp"
   sed -i "s|{{PATH}}|/${relative_path}|g" "$html_file.tmp"
   sed -i "s|{{TIMESTAMP}}|${timestamp}|g" "$html_file.tmp"
   sed -i "s|{{REPO}}|${GITHUB_REPOSITORY}|g" "$html_file.tmp"
