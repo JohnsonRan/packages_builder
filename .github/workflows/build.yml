@@ -143,6 +143,7 @@ jobs:
       - name: generate index
         run: |
           bash scripts/generate-index.sh public
+          echo 'opkg.ihtw.moe' > ./public/CNAME
 
       - name: feed
         uses: peaceiris/actions-gh-pages@v4
