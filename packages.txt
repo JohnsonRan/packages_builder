@@ -1,1 +1,1 @@
-node_exporter speedtest-ex boltbrowser neko-status v2ray-geodata luci-app-duck
+node_exporter speedtest-ex boltbrowser neko-status v2ray-geodata luci-app-duck geoview

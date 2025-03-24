@@ -60,6 +60,10 @@ boltbrowser /etc/mihomo/run/cache.db
 
 替换为 <https://github.com/MetaCubeX/meta-rules-dat>
 
+### geoview
+
+<https://github.com/snowie2000/geoview>
+
 ### 特别感谢
 
 - [morytyann](http://github.com/morytyann)
