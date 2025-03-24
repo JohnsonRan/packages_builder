@@ -1,0 +1,179 @@
+Package: boltbrowser
+Version: 2.2-r1
+Depends: libc
+License: GPL-3.0
+Section: utils
+URL: https://github.com/br0xen/boltbrowser
+Architecture: aarch64_generic
+Installed-Size: 2621440
+Filename: boltbrowser_2.2-r1_aarch64_generic.ipk
+Size: 1068976
+SHA256sum: 08e54aea3aa8acb1d2670ddf999d41ef28556fd80687d8aeaa8742e195afcf53
+Description:  A CLI Browser for BoltDB Files
+
+Package: duck-geoip
+Version: 2025.03.04-r1
+Depends: libc, duck, v2ray-geoip
+License: AGPL-3.0-only
+Section: net
+URL: https://github.com/duckuniverse/dae
+Architecture: all
+Installed-Size: 10240
+Filename: duck-geoip_2025.03.04-r1_all.ipk
+Size: 943
+SHA256sum: 538e22b700a8b13c8fa7489dfb52908e8b28754dbc086079b1521d81b03ec704
+Description:  geoip for duck
+
+Package: duck-geosite
+Version: 2025.03.04-r1
+Depends: libc, duck, v2ray-geosite
+License: AGPL-3.0-only
+Section: net
+URL: https://github.com/duckuniverse/dae
+Architecture: all
+Installed-Size: 10240
+Filename: duck-geosite_2025.03.04-r1_all.ipk
+Size: 946
+SHA256sum: f3e4d8bf87b4e0b7f8110f910e3b48d30d8166b290723cad29704a9bfce8bf96
+Description:  geosite for duck
+
+Package: duck
+Version: 2025.03.04-r1
+Depends: libc, ca-bundle, kmod-sched-core, kmod-sched-bpf, kmod-xdp-sockets-diag, kmod-veth
+License: AGPL-3.0-only
+Section: net
+URL: https://github.com/duckuniverse/dae
+Architecture: aarch64_generic
+Installed-Size: 27064320
+Filename: duck_2025.03.04-r1_aarch64_generic.ipk
+Size: 9685235
+SHA256sum: 26512dc89fec051cdcf6b991d59ec680e794c2b881789419a602313f5cd279ce
+Description:  dae, means goose, is a lightweight and high-performance transparent
+ proxy solution.
+ 
+ In order to improve the traffic diversion performance as much as possible,
+ dae runs the transparent proxy and traffic diversion suite in the linux
+ kernel by eBPF. Therefore, we have the opportunity to make the direct
+ traffic bypass the forwarding by proxy application and achieve true direct
+ traffic through. Under such a magic trick, there is almost no performance
+ loss and additional resource consumption for direct traffic.
+
+Package: geoview
+Version: 0.1.2-r1
+Depends: libc
+License: Apache-2.0
+Section: net
+URL: https://github.com/snowie2000/geoview
+Architecture: aarch64_generic
+Installed-Size: 5867520
+Filename: geoview_0.1.2-r1_aarch64_generic.ipk
+Size: 2284425
+SHA256sum: 7050b124c395eeffe16cbced4908bae8bbc8c918f8643015aa37fae32ae8e025
+Description:  geoview is a handy tool to extract useful information from geo* files.
+
+Package: luci-app-duck
+Version: 1.3.0-r1
+Depends: libc, duck, duck-geoip, duck-geosite
+License: Apache-2.0
+Section: luci
+URL: https://github.com/openwrt/luci
+Architecture: all
+Installed-Size: 6594560
+Filename: luci-app-duck_1.3.0-r1_all.ipk
+Size: 1692293
+SHA256sum: 27d19b41d686a212e83f94722adc46075a1c9a7a140ad5d6dae47b3ec0a927bd
+Description:  Another LuCI app for dae
+
+Package: luci-i18n-duck-zh-cn
+Version: 25.069.36789~d0f99b8
+Depends: libc, luci-app-duck
+License: Apache-2.0
+Section: luci
+Architecture: all
+Installed-Size: 10240
+Filename: luci-i18n-duck-zh-cn_25.069.36789~d0f99b8_all.ipk
+Size: 2096
+SHA256sum: 46f631bfdbb4e46ec3b0f6ad67187da70b32d8944f2d82c392b6a89af4cd61ea
+Description:  Translation for luci-app-duck - 简体中文 (Chinese Simplified)
+
+Package: neko-status
+Version: 0.1-r1
+Depends: libc
+License: MIT
+Section: utils
+URL: https://github.com/nkeonkeo/nekonekostatus
+Architecture: aarch64_generic
+Installed-Size: 8386560
+Filename: neko-status_0.1-r1_aarch64_generic.ipk
+Size: 3243797
+SHA256sum: 6403571f06b151a791321d3f01c82a3cef429e4036a2cdb24c91b5729c8732cf
+Description:  Server TZ
+
+Package: node_exporter
+Version: 1.9.0-r1
+Depends: libc
+License: Apache-2.0
+Section: utils
+URL: https://github.com/prometheus/node_exporter
+Architecture: aarch64_generic
+Installed-Size: 15114240
+Filename: node_exporter_1.9.0-r1_aarch64_generic.ipk
+Size: 5569318
+SHA256sum: 6fd233f077d6c738025e5a872df5d8c49278e2ee2cd0a78d65a4da715349c4d3
+Description:  Prometheus exporter for hardware and OS metrics exposed by *NIX kernels
+
+Package: speedtest-ex
+Version: 1.0.0-r1
+Depends: libc
+License: LGPL-3.0
+Section: net
+URL: https://github.com/WJQSERVER/speedtest-ex
+Architecture: aarch64_generic
+Installed-Size: 15738880
+Filename: speedtest-ex_1.0.0-r1_aarch64_generic.ipk
+Size: 6220816
+SHA256sum: a6c6bf3097c50e17a1dcd5c7b842112c7c5df8ff8a1da95d8329a1fe7f4ce13a
+Description:  This project is a significant refactor of the speedtest-go project
+
+Package: v2ray-geoip
+Version: 202503241555-r1
+Depends: libc
+Provides: v2ray-geodata, xray-geodata, xray-geoip
+License: CC-BY-SA-4.0
+Section: net
+URL: https://www.v2fly.org
+Architecture: all
+Installed-Size: 194560
+Filename: v2ray-geoip_202503241555-r1_all.ipk
+Size: 45699
+SHA256sum: c83d8077b3cdb3a790bcd5fc71a2654b8fc28a9c51a7f1b78b86188689c9cec4
+Description:  GeoIP List for V2Ray
+
+Package: v2ray-geosite-ir
+Version: 202502030035-r1
+Depends: libc
+Provides: xray-geosite-ir
+License: MIT
+Section: net
+URL: https://www.v2fly.org
+Architecture: all
+Installed-Size: 3706880
+Filename: v2ray-geosite-ir_202502030035-r1_all.ipk
+Size: 1051771
+SHA256sum: 28cbbdcd76451ffd684e5b96ea4ff6451981a5e8f0e7a88eb471c80b6c7dcae1
+Description:  Iran Geosite List for V2Ray
+
+Package: v2ray-geosite
+Version: 202503241555-r1
+Depends: libc
+Provides: v2ray-geodata, xray-geodata, xray-geosite
+License: MIT
+Section: net
+URL: https://www.v2fly.org
+Architecture: all
+Installed-Size: 4003840
+Filename: v2ray-geosite_202503241555-r1_all.ipk
+Size: 1197556
+SHA256sum: 3add234ee3908f1ecef04444d8bd8ac29d4577ea1e48a251896e3cbc9b655cd7
+Description:  Geosite List for V2Ray
+
