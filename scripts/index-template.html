@@ -469,12 +469,14 @@
         if (a === '-') return -1;
         if (b === '-') return 1;
         
-        const units = { B: 1, K: 1024, M: 1024*1024, G: 1024*1024*1024 };
+        const units = { '': 1, K: 1024, M: 1024*1024, G: 1024*1024*1024, T: 1024*1024*1024*1024 };
         
         function parseSize(size) {
-          const parts = size.split(' ');
-          if (parts.length === 2) {
-            return parseFloat(parts[0]) * units[parts[1]];
+          const match = size.match(/^([\d.]+)([KMGT])?B?$/i);
+          if (match) {
+            const num = parseFloat(match[1]);
+            const unit = match[2] ? match[2].toUpperCase() : '';
+            return num * units[unit];
           }
           return parseFloat(size);
         }
