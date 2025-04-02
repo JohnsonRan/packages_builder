@@ -1,0 +1,235 @@
+Package: boltbrowser
+Version: 2.2-r1
+Depends: libc
+Source: /feed/sources/packages_utils_boltbrowser
+SourceName: boltbrowser
+License: GPL-3.0
+Section: utils
+SourceDateEpoch: 1739350860
+URL: https://github.com/br0xen/boltbrowser
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: aarch64_cortex-a53
+Installed-Size: 2621440
+Filename: boltbrowser_2.2-r1_aarch64_cortex-a53.ipk
+Size: 1068911
+SHA256sum: 190db1bd020c8a3d087a4f1a2f7dfae8897ffcf6d58882061729d772118ea229
+Description:  A CLI Browser for BoltDB Files
+
+Package: duck-geoip
+Version: 2025.03.31-r4
+Depends: libc, duck, v2ray-geoip
+Source: /feed/sources/InfinityDuck/duck
+SourceName: duck
+License: AGPL-3.0-only
+Section: net
+SourceDateEpoch: 1743518167
+URL: https://github.com/duckuniverse/dae
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: all
+Installed-Size: 10240
+Filename: duck-geoip_2025.03.31-r4_all.ipk
+Size: 944
+SHA256sum: eedfda8fa74e2f6e0480fd1282fdd00d6c3c38e6c6c99a6f7dc77b95e0585f9d
+Description:  geoip for duck
+
+Package: duck-geosite
+Version: 2025.03.31-r4
+Depends: libc, duck, v2ray-geosite
+Source: /feed/sources/InfinityDuck/duck
+SourceName: duck
+License: AGPL-3.0-only
+Section: net
+SourceDateEpoch: 1743518167
+URL: https://github.com/duckuniverse/dae
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: all
+Installed-Size: 10240
+Filename: duck-geosite_2025.03.31-r4_all.ipk
+Size: 946
+SHA256sum: bd8edc88fbc61f9443a1b1dcd102d681ca03e78662233e3148769509ab66e630
+Description:  geosite for duck
+
+Package: duck
+Version: 2025.03.31-r4
+Depends: libc, ca-bundle, kmod-sched-core, kmod-sched-bpf, kmod-xdp-sockets-diag, kmod-veth
+Source: /feed/sources/InfinityDuck/duck
+SourceName: duck
+License: AGPL-3.0-only
+Section: net
+SourceDateEpoch: 1743518167
+URL: https://github.com/duckuniverse/dae
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: aarch64_cortex-a53
+Installed-Size: 27064320
+Filename: duck_2025.03.31-r4_aarch64_cortex-a53.ipk
+Size: 9685251
+SHA256sum: 2bb4d5a540aee31526b0bde21d795f9c8b2ca944ac2fc69ceceaab24e46ca446
+Description:  dae, means goose, is a lightweight and high-performance transparent
+ proxy solution.
+ 
+ In order to improve the traffic diversion performance as much as possible,
+ dae runs the transparent proxy and traffic diversion suite in the linux
+ kernel by eBPF. Therefore, we have the opportunity to make the direct
+ traffic bypass the forwarding by proxy application and achieve true direct
+ traffic through. Under such a magic trick, there is almost no performance
+ loss and additional resource consumption for direct traffic.
+
+Package: geoview
+Version: 0.1.5-r1
+Depends: libc
+Source: /feed/sources/geoview
+SourceName: geoview
+License: Apache-2.0
+LicenseFiles: LICENSE
+Section: net
+SourceDateEpoch: 1743254163
+URL: https://github.com/snowie2000/geoview
+Maintainer: snowie2000
+Architecture: aarch64_cortex-a53
+Installed-Size: 5867520
+Filename: geoview_0.1.5-r1_aarch64_cortex-a53.ipk
+Size: 2290235
+SHA256sum: 37ab26056f8a83def4f9b665032106c404ca47281b7e6aba80e20726beeec706
+Description:  geoview is a handy tool to extract useful information from geo* files.
+
+Package: luci-app-duck
+Version: 1.3.2-r1
+Depends: libc, duck, duck-geoip, duck-geosite
+Source: /feed/sources/InfinityDuck/luci-app-duck
+SourceName: luci-app-duck
+License: Apache-2.0
+Section: luci
+SourceDateEpoch: 1743518167
+URL: https://github.com/openwrt/luci
+Maintainer: OpenWrt LuCI community
+Architecture: all
+Installed-Size: 6594560
+Filename: luci-app-duck_1.3.2-r1_all.ipk
+Size: 1692469
+SHA256sum: 2f8dda85f89962161087474dc2a98020deef1364b25f53e0d47bce88917469af
+Description:  Another LuCI app for dae
+
+Package: luci-i18n-duck-zh-cn
+Version: 25.090.47802~f8ceb8b
+Depends: libc, luci-app-duck
+Source: /feed/sources/InfinityDuck/luci-app-duck
+SourceName: luci-app-duck
+License: Apache-2.0
+Section: luci
+SourceDateEpoch: 1743518167
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: all
+Installed-Size: 10240
+Filename: luci-i18n-duck-zh-cn_25.090.47802~f8ceb8b_all.ipk
+Size: 2228
+SHA256sum: 39f763ce06a5c556bfe93de572a8dc16855a36fdb3149a5da8f8d80b32322b70
+Description:  Translation for luci-app-duck - 简体中文 (Chinese Simplified)
+
+Package: neko-status
+Version: 0.1-r1
+Depends: libc
+Source: /feed/sources/packages_utils_neko-status
+SourceName: neko-status
+License: MIT
+Section: utils
+SourceDateEpoch: 1739424000
+URL: https://github.com/nkeonkeo/nekonekostatus
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: aarch64_cortex-a53
+Installed-Size: 8386560
+Filename: neko-status_0.1-r1_aarch64_cortex-a53.ipk
+Size: 3244130
+SHA256sum: 1cde2f1d6fce648ec7463d9f336e2c6e580545634c648c26f41a928e7c404d05
+Description:  Server TZ
+
+Package: node_exporter
+Version: 1.9.1-r1
+Depends: libc
+Source: /feed/sources/packages_utils_node_exporter
+SourceName: node_exporter
+License: Apache-2.0
+Section: utils
+SourceDateEpoch: 1743556848
+URL: https://github.com/prometheus/node_exporter
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: aarch64_cortex-a53
+Installed-Size: 15114240
+Filename: node_exporter_1.9.1-r1_aarch64_cortex-a53.ipk
+Size: 5571401
+SHA256sum: 92d3b5e7e228c93e0efe6c68ec48b80af3f41557f9711a400a368ebbccf005b4
+Description:  Prometheus exporter for hardware and OS metrics exposed by *NIX kernels
+
+Package: speedtest-ex
+Version: 1.0.0-r1
+Depends: libc
+Source: /feed/sources/packages_net_speedtest-ex
+SourceName: speedtest-ex
+License: LGPL-3.0
+Section: net
+SourceDateEpoch: 1742434892
+URL: https://github.com/WJQSERVER/speedtest-ex
+Maintainer: JohnsonRan <me@ihtw.moe>
+Architecture: aarch64_cortex-a53
+Installed-Size: 15738880
+Filename: speedtest-ex_1.0.0-r1_aarch64_cortex-a53.ipk
+Size: 6219893
+SHA256sum: d206f7f142598e817386ca4f086f47b15685ace8e1a8dcea237a750f67c47f69
+Description:  This project is a significant refactor of the speedtest-go project
+
+Package: v2ray-geoip
+Version: 202504021021-r1
+Depends: libc
+Provides: v2ray-geodata, xray-geodata, xray-geoip
+Source: /feed/sources/packages_net_v2ray-geodata
+SourceName: v2ray-geodata
+License: CC-BY-SA-4.0
+LicenseFiles: LICENSE
+Section: net
+SourceDateEpoch: 1740191531
+URL: https://www.v2fly.org
+Maintainer: Tianling Shen <cnsztl@immortalwrt.org>
+Architecture: all
+Installed-Size: 194560
+Filename: v2ray-geoip_202504021021-r1_all.ipk
+Size: 45676
+SHA256sum: f978eeaf1dca90d5a57fecec56ae53bd5ee033bfe8e8b061b79eaefa26ce0e41
+Description:  GeoIP List for V2Ray
+
+Package: v2ray-geosite-ir
+Version: 202502030035-r1
+Depends: libc
+Provides: xray-geosite-ir
+Source: /feed/sources/packages_net_v2ray-geodata
+SourceName: v2ray-geodata
+License: MIT
+LicenseFiles: LICENSE
+Section: net
+SourceDateEpoch: 1740191531
+URL: https://www.v2fly.org
+Maintainer: Tianling Shen <cnsztl@immortalwrt.org>
+Architecture: all
+Installed-Size: 3706880
+Filename: v2ray-geosite-ir_202502030035-r1_all.ipk
+Size: 1051771
+SHA256sum: 28cbbdcd76451ffd684e5b96ea4ff6451981a5e8f0e7a88eb471c80b6c7dcae1
+Description:  Iran Geosite List for V2Ray
+
+Package: v2ray-geosite
+Version: 202504021021-r1
+Depends: libc
+Provides: v2ray-geodata, xray-geodata, xray-geosite
+Source: /feed/sources/packages_net_v2ray-geodata
+SourceName: v2ray-geodata
+License: MIT
+LicenseFiles: LICENSE
+Section: net
+SourceDateEpoch: 1740191531
+URL: https://www.v2fly.org
+Maintainer: Tianling Shen <cnsztl@immortalwrt.org>
+Architecture: all
+Installed-Size: 4157440
+Filename: v2ray-geosite_202504021021-r1_all.ipk
+Size: 1241101
+SHA256sum: 20c85a24cc272ca8dd4d19ce0b80eca2609b066d3d02e6c4527062f441b687ea
+Description:  Geosite List for V2Ray
+
