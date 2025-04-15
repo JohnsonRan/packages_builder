@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       should_build: ${{ github.event_name == 'workflow_dispatch' || steps.check-updates.outputs.has_changes }}
+      release_body: ${{ steps.check-updates.outputs.release_body }}
 
     steps:
       - uses: actions/checkout@v4
@@ -21,26 +22,41 @@ jobs:
         id: check-updates
         if: github.event_name != 'workflow_dispatch'
         run: |
-          today=$(date -u '+%Y-%m-%d')
           has_changes=false
+          release_body=""
+          
+          # 获取本项目最新release日期
+          latest_release_date=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases?per_page=1" | jq -r '.[0].published_at[:10]' 2>/dev/null || echo "1970-01-01")
+          echo "Latest release date: $latest_release_date"
           
           for repo in $(grep -v '^$' sourcelist.txt); do
             echo "Checking $repo..."
-            # 获取最新提交的日期
-            latest_commit_date=$(curl -s "https://api.github.com/repos/$repo/commits?per_page=1" | jq -r '.[0].commit.committer.date[:10]')
+            # 获取最新提交的日期和commit hash
+            repo_info=$(curl -s "https://api.github.com/repos/$repo/commits?per_page=1")
+            latest_commit_date=$(echo "$repo_info" | jq -r '.[0].commit.committer.date[:10]')
+            latest_commit_hash=$(echo "$repo_info" | jq -r '.[0].sha[:7]')
             
-            if [ "$latest_commit_date" == "$today" ]; then
-              echo "Found changes in $repo on $today"
+            echo "$repo - Commit date: $latest_commit_date, Release date: $latest_release_date"
+            
+            if [[ "$latest_commit_date" > "$latest_release_date" ]]; then
+              echo "Found updates in $repo since last release"
               has_changes=true
-              break
+              repo_name=$(basename "$repo")
+              release_body="${release_body}${repo_name}: ${latest_commit_hash}\n"
             fi
           done
           
           echo "has_changes=$has_changes" >> $GITHUB_OUTPUT
+          # 使用多行输出语法
+          echo "release_body<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$release_body" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Force build for manual trigger
         if: github.event_name == 'workflow_dispatch'
-        run: echo "has_changes=true" >> $GITHUB_OUTPUT
+        run: |
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "release_body=Manual build triggered by workflow_dispatch" >> $GITHUB_OUTPUT
 
   build:
     needs: check
@@ -118,6 +134,7 @@ jobs:
           tag: ${{ steps.pkglist.outputs.date }}
           commit: main
           replacesArtifacts: true
+          body: ${{ needs.check.outputs.release_body }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: "InfinitySubstance_${{ matrix.arch }}-${{ matrix.branch }}.tar.gz"
 
