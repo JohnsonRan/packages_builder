@@ -34,7 +34,8 @@ jobs:
             # 获取最新提交的日期和commit hash
             repo_info=$(curl -s "https://api.github.com/repos/$repo/commits?per_page=1")
             latest_commit_date=$(echo "$repo_info" | jq -r '.[0].commit.committer.date[:10]')
-            latest_commit_hash=$(echo "$repo_info" | jq -r '.[0].sha[:7]')
+            latest_commit_hash=$(echo "$repo_info" | jq -r '.[0].sha')
+            short_commit_hash=${latest_commit_hash:0:7}
             
             echo "$repo - Commit date: $latest_commit_date, Release date: $latest_release_date"
             
@@ -42,7 +43,24 @@ jobs:
               echo "Found updates in $repo since last release"
               has_changes=true
               repo_name=$(basename "$repo")
-              release_body="${release_body}${repo_name}: ${latest_commit_hash}\n"
+              
+              # 创建可点击的commit链接
+              commit_link="[${short_commit_hash}](https://github.com/${repo}/commit/${latest_commit_hash})"
+              
+              # 获取上次release到现在的所有commit信息
+              since_date="${latest_release_date}T00:00:00Z"
+              until_date="${latest_commit_date}T23:59:59Z"
+              changes_url="https://api.github.com/repos/${repo}/commits?since=${since_date}&until=${until_date}"
+              changes_info=$(curl -s "${changes_url}")
+              changes_count=$(echo "$changes_info" | jq '. | length')
+              
+              # 创建可查看所有变更的链接
+              changes_link=""
+              if [[ "$changes_count" -gt 1 ]]; then
+                changes_link=" ([查看全部${changes_count}个更改](https://github.com/${repo}/commits?since=${latest_release_date}&until=${latest_commit_date}))"
+              fi
+              
+              release_body="${release_body}${repo_name}: ${commit_link}${changes_link}\n"
             fi
           done
           
