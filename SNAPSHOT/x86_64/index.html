@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InfinitySubstance - Extra Packages for OpenWrt</title>
+  <link rel="icon" href="https://avatars.githubusercontent.com/u/89735151">
+  <base href=".">
+  <style>
+    :root {
+      --primary-color: #4f46e5;
+      --hover-color: #4338ca;
+      --dir-color: #8b5cf6;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --bg-color: #ffffff;
+      --bg-accent: #f9fafb;
+      --border-color: #e5e7eb;
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: #6366f1;
+        --hover-color: #818cf8;
+        --dir-color: #a78bfa;
+        --text-color: #e5e7eb;
+        --text-light: #9ca3af;
+        --bg-color: #111827;
+        --bg-accent: #1f2937;
+        --border-color: #374151;
+        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+      }
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 2rem 1rem;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    
+    h1 { 
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+    }
+    
+    .container {
+      background-color: var(--bg-accent);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 2rem;
+    }
+    
+    .path-finder { 
+      margin-bottom: 1.5rem; 
+      padding: 0.75rem 1rem; 
+      background: var(--bg-accent); 
+      border-radius: 0.375rem;
+      border: 1px solid var(--border-color);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+    
+    .path-finder a {
+      display: inline-block;
+      padding: 0 0.25rem;
+    }
+    
+    .path-finder a:hover {
+      background-color: rgba(0,0,0,0.05);
+      border-radius: 0.25rem;
+    }
+    
+    .path-separator {
+      margin: 0 0.25rem;
+      color: var(--text-light);
+    }
+    
+    table { 
+      width: 100%; 
+      border-collapse: collapse;
+    }
+    
+    th, td { 
+      padding: 0.75rem 1rem; 
+      text-align: left; 
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    th {
+      background-color: var(--bg-accent);
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    tr:hover { 
+      background-color: var(--bg-accent); 
+    }
+    
+    a { 
+      text-decoration: none; 
+      color: var(--primary-color);
+      transition: color 0.2s;
+    }
+    
+    a:hover {
+      color: var(--hover-color);
+      text-decoration: underline;
+    }
+    
+    .dir { 
+      font-weight: 600; 
+      color: var(--dir-color);
+    }
+    
+    .size { 
+      text-align: right;
+      width: 100px;
+      color: var(--text-light);
+    }
+    
+    .date { 
+      color: var(--text-light);
+      width: 200px;
+    }
+    
+    footer {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-light);
+      font-size: 0.875rem;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .date {
+        display: none;
+      }
+      
+      .size {
+        width: 70px;
+      }
+    }
+    
+    .readme-container {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: var(--bg-accent);
+      border-radius: 0.5rem;
+      box-shadow: var(--shadow);
+      display: none;
+    }
+    
+    .readme-container h2 {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .readme-content {
+      overflow-wrap: break-word;
+    }
+    
+    .readme-content img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .readme-content pre {
+      padding: 1rem;
+      background-color: var(--bg-color);
+      border-radius: 0.25rem;
+      overflow-x: auto;
+    }
+    
+    .readme-content code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.9rem;
+    }
+    
+    .readme-content pre code {
+      padding: 0;
+      background-color: transparent;
+    }
+    
+    .readme-content code:not(pre code) {
+      padding: 0.2rem 0.4rem;
+      background-color: var(--bg-color);
+      border-radius: 0.25rem;
+    }
+    
+    .readme-content blockquote {
+      padding-left: 1rem;
+      border-left: 4px solid var(--border-color);
+      color: var(--text-light);
+      margin: 1rem 0;
+    }
+    
+    .readme-content table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+    
+    .readme-content h1, 
+    .readme-content h2, 
+    .readme-content h3, 
+    .readme-content h4, 
+    .readme-content h5, 
+    .readme-content h6 {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .readme-content p {
+      margin: 0.75rem 0;
+    }
+    
+    .readme-content ul, 
+    .readme-content ol {
+      margin: 0.75rem 0;
+      padding-left: 1.5rem;
+    }
+    
+    .search-container {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    
+    #search-input {
+      padding: 0.5rem;
+      padding-left: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      width: 200px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin-left: 8px;
+      position: relative;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      z-index: 1;
+      pointer-events: none;
+      color: var(--text-light);
+    }
+    
+    .header-cell {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    
+    .sortable {
+      cursor: pointer;
+      position: relative;
+      padding-right: 1.5rem;
+    }
+    
+    .sortable::after {
+      content: "⇅";
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.4;
+    }
+    
+    .sort-asc::after {
+      content: "↑";
+      opacity: 1;
+    }
+    
+    .sort-desc::after {
+      content: "↓";
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="path-finder">/SNAPSHOT/x86_64</div>
+  
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <div class="header-cell">
+              <span class="sortable" data-sort="name">NAME</span>
+              <div class="search-container">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="search-input" placeholder="Search">
+              </div>
+            </div>
+          </th>
+          <th>
+            <div class="header-cell">
+              <span class="sortable" data-sort="size">SIZE</span>
+            </div>
+          </th>
+          <th class="date">
+            <div class="header-cell">
+              <span class="sortable" data-sort="date">MODIFIED</span>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+      <td><a href="../index.html" class="dir">..</a></td>
+      <td class="size">-</td>
+      <td class="date">-</td>
+    </tr>
+<tr>
+      <td><a href="InfinitySubstance/index.html" class="dir">InfinitySubstance/</a></td>
+      <td class="size">-</td>
+      <td class="date">-</td>
+    </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div id="readme-container" class="readme-container">
+    <div id="readme-content" class="readme-content">
+    </div>
+  </div>
+  
+  <footer>
+    Last update: 2025-06-13 10:45:33 | <a href="https://github.com/JohnsonRan/InfinitySubstance">GitHub</a>
+  </footer>
+
+  <script src="https://unpkg.com/marked@latest/marked.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const pathContainer = document.querySelector('.path-finder');
+      const pathText = pathContainer.textContent.trim();
+      
+      if (pathText) {
+        const pathParts = pathText.split('/').filter(Boolean);
+        let pathLinks = [];
+        
+        pathLinks.push('<a href="/">/</a>');
+        
+        let currentPath = '';
+        for (let i = 0; i < pathParts.length; i++) {
+          currentPath += '/' + pathParts[i];
+          
+          if (i === pathParts.length - 1) {
+            pathLinks.push(`<span>${pathParts[i]}</span>`);
+          } else {
+            pathLinks.push(`<a href="${currentPath}/">${pathParts[i]}</a>`);
+          }
+        }
+        
+        pathContainer.innerHTML = pathLinks.join(' <span class="path-separator">&gt;</span> ');
+      }
+      
+      pathContainer.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+        
+        e.preventDefault();
+        window.location.href = link.getAttribute('href');
+      });
+    
+      if (window.location.pathname.endsWith('/index.html')) {
+        const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/');
+        window.history.replaceState(null, document.title, cleanPath);
+      }
+      
+      document.querySelector('tbody').addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (!link) return;
+        
+        const href = link.getAttribute('href');
+        if (href && href.endsWith('/index.html')) {
+          e.preventDefault();
+          window.location.href = href.replace(/\/index\.html$/, '/');
+        }
+      });
+      
+      const searchInput = document.getElementById('search-input');
+      const tableRows = Array.from(document.querySelectorAll('tbody tr'));
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        tableRows.forEach(row => {
+          const name = row.querySelector('td:first-child').textContent.toLowerCase();
+          if (name.includes(searchTerm)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      });
+
+      searchInput.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+      
+      const sortableHeaders = document.querySelectorAll('.sortable');
+      let currentSort = { column: 'name', direction: 'asc' };
+      
+      function sortTable(column, direction) {
+        const tbody = document.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        const sortedRows = rows.sort((a, b) => {
+          const aValue = a.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+          const bValue = b.querySelector(`td:nth-child(${getColumnIndex(column)})`).textContent.trim();
+          
+          if (column === 'size') {
+            return compareSize(aValue, bValue) * (direction === 'asc' ? 1 : -1);
+          } else if (column === 'date') {
+            return new Date(aValue) - new Date(bValue) * (direction === 'asc' ? 1 : -1);
+          } else {
+            const aIsDir = a.querySelector('.dir') !== null;
+            const bIsDir = b.querySelector('.dir') !== null;
+            
+            if (aIsDir && !bIsDir) return -1;
+            if (!aIsDir && bIsDir) return 1;
+            
+            return aValue.localeCompare(bValue) * (direction === 'asc' ? 1 : -1);
+          }
+        });
+        
+        while (tbody.firstChild) {
+          tbody.removeChild(tbody.firstChild);
+        }
+        
+        sortedRows.forEach(row => tbody.appendChild(row));
+      }
+      
+      function getColumnIndex(column) {
+        switch (column) {
+          case 'name': return 1;
+          case 'size': return 2;
+          case 'date': return 3;
+          default: return 1;
+        }
+      }
+      
+      function compareSize(a, b) {
+        if (a === '-' && b === '-') return 0;
+        if (a === '-') return -1;
+        if (b === '-') return 1;
+        
+        const units = { '': 1, K: 1024, M: 1024*1024, G: 1024*1024*1024, T: 1024*1024*1024*1024 };
+        
+        function parseSize(size) {
+          const match = size.match(/^([\d.]+)([KMGT])?B?$/i);
+          if (match) {
+            const num = parseFloat(match[1]);
+            const unit = match[2] ? match[2].toUpperCase() : '';
+            return num * units[unit];
+          }
+          return parseFloat(size);
+        }
+        
+        return parseSize(a) - parseSize(b);
+      }
+      
+      sortableHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+          const column = this.dataset.sort;
+          let direction = 'asc';
+          
+          sortableHeaders.forEach(h => {
+            h.classList.remove('sort-asc', 'sort-desc');
+          });
+          
+          if (currentSort.column === column) {
+            direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+          }
+          
+          this.classList.add(direction === 'asc' ? 'sort-asc' : 'sort-desc');
+          
+          currentSort = { column, direction };
+          
+          sortTable(column, direction);
+        });
+      });
+      
+      document.querySelector('[data-sort="name"]').classList.add('sort-asc');
+      sortTable('name', 'asc');
+      
+      fetch('README.md')
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          }
+          throw new Error('README.md not found');
+        })
+        .then(markdown => {
+          document.getElementById('readme-content').innerHTML = marked.parse(markdown);
+          document.getElementById('readme-container').style.display = 'block';
+          
+          document.querySelectorAll('#readme-content a').forEach(link => {
+            if (link.getAttribute('href') && !link.getAttribute('href').startsWith('http') && 
+                !link.getAttribute('href').startsWith('#') && !link.getAttribute('href').startsWith('/')) {
+              link.setAttribute('href', link.getAttribute('href'));
+            }
+          });
+          
+          document.querySelectorAll('#readme-content img').forEach(img => {
+            if (img.getAttribute('src') && !img.getAttribute('src').startsWith('http') && 
+                !img.getAttribute('src').startsWith('/')) {
+              img.setAttribute('src', img.getAttribute('src'));
+            }
+          });
+        })
+        .catch(error => {
+          console.log('No README found or other error occurred:', error);
+        });
+    });
+  </script>
+</body>
+</html>

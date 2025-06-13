@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "architecture": "aarch64_generic",
+  "packages": {
+    "boltbrowser": "2.2-r1",
+    "duck": "2025.06.05-r1",
+    "duck-geoip": "2025.06.05-r1",
+    "duck-geosite": "2025.06.05-r1",
+    "geoview": "0.1.10-r1",
+    "luci-app-duck": "1.3.2-r1",
+    "luci-i18n-duck-zh-cn": "25.090.47802~f8ceb8b",
+    "neko-status": "0.1-r1",
+    "node_exporter": "1.9.1-r1",
+    "speedtest-ex": "1.1.2-r1",
+    "v2ray-geoip": "202506131025-r1",
+    "v2ray-geosite": "202506131025-r1",
+    "v2ray-geosite-ir": "202502030035-r1"
+  }
+}
